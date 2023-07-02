@@ -1,0 +1,122 @@
+.home-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 40px;
+  background-color: aliceblue;
+
+  .header-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 800;
+    }
+
+    .logout-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: row;
+
+    .left-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+
+      .user-name {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+
+    .vertical-separator {
+      height: 100%;
+      margin: 0 40px;
+      border-left: 1px solid #000000;
+    }
+
+    .right-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 5px;
+
+      .contact-info {
+        display: flex;
+        gap: 5px;
+        align-items: flex-start;
+
+        .email,
+        .mobile {
+          display: flex;
+          align-items: flex-end;
+          gap: 10px;
+
+          .edit-icon {
+            font-size: 14px;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .contact-info.mobile-view {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+.portal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 45px 60px 0 60px;
+
+  .top-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .add-ticket-button {
+      gap: 10px;
+      padding: 12px 45px;
+
+      .p-button-label {
+        font-weight: 500;
+      }
+    }
+  }
+
+  .top-section.mobile-view {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .complaints {
+    display: flex;
+    justify-content: center;
+
+    .complaint-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 40px;
+      padding: 40px 0px;
+    }
+  }
+}

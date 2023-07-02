@@ -1,0 +1,140 @@
+.register-dialog-header {
+  border-bottom: 1px solid #6366f1 !important;
+}
+
+.register-dialog-box {
+  display: flex;
+  flex-direction: column;
+  padding-top: 25px;
+
+  .register-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
+
+    .register-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .register-field-label {
+        display: flex;
+        font-size: 14px;
+        gap: 3px;
+
+        .field-mandatory {
+          color: #ea2027;
+        }
+      }
+
+      .register-input {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .attachment-field {
+        flex-direction: column;
+        padding: 0px;
+
+        .input-field {
+          display: flex;
+          height: 35px;
+
+          .register-field {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 6px 0 0 6px;
+          }
+
+          .attachment-browse {
+            cursor: pointer;
+          }
+        }
+      }
+
+      .ticket-dropdown {
+        .p-dropdown-label {
+          padding: 8px;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .error-message {
+      font-size: 12px;
+      color: red;
+      height: 16px;
+    }
+  }
+
+  .register-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 5px;
+
+    .register-button {
+      padding: 7px 10px;
+
+      span {
+        font-weight: 400;
+      }
+    }
+
+    .close-button {
+      background-color: #535c68;
+      border: 1px solid #535c68;
+    }
+  }
+}
+
+.ticket-panel {
+  .p-dropdown-items {
+    padding: 1px !important;
+
+    .p-dropdown-item {
+      font-size: 14px;
+      padding: 0.75rem 8px !important;
+    }
+  }
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .filter-dropdowns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .key-dropdown,
+    .value-dropdown {
+      .p-dropdown-label {
+        padding: 8px;
+        font-size: 14px;
+      }
+    }
+
+    .key-dropdown {
+      width: 150px;
+    }
+
+    .value-dropdown {
+      width: 130px;
+    }
+
+    .reset-button {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+
+.top-section.mobile-view {
+  .filter-section {
+    flex-direction: column;
+  }
+}
