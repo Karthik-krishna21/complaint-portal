@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Button } from 'primereact/button';
 import CancelTicket from './CancelTicket';
 import { classNames } from 'primereact/utils';
@@ -18,6 +19,53 @@ import './css/LoginDialogs.scss';
 
 type Props = StateProps & DispatchProps & any;
 
+const refreshComplaintList = (props) => {
+  const { updateComplaintList, loggedIn } = props;
+
+  axios
+    .post('http://cafmdemo.emqube.com:81/api/api/Ticket/GetTicketList', {
+      'FromDate': '',
+      'ToDate': '',
+      'PageIndex': 0,
+      'PageSize': 25,
+      'SearchKey': '',
+      'SiteIds': '',
+      'LocationIds': '',
+      'StatusIds': '1,2,3,4,5,6,7,8',
+      'SortBy': 'TicketDate',
+      'SortOrder': -1,
+      'TicketId': 0,
+      'LoggedUserId': loggedIn,
+      'LicenseeId': 1,
+    })
+    .then((response) => {
+      const { TicketList } = response.data;
+      console.log('TicketList:', TicketList);
+
+      updateComplaintList(
+        TicketList.map((ticket) => {
+          const {
+            TicketId,
+            IssueId,
+            IssueDetails,
+            CreatedBy,
+            Remark,
+            DateTicket,
+          } = ticket;
+
+          return {
+            ticketId: TicketId,
+            issue: IssueId,
+            issueDetail: IssueDetails,
+            reporter: CreatedBy,
+            visitTime: Remark.split(':')[1]?.trim(),
+            issueTime: DateTicket,
+          };
+        })
+      );
+    });
+};
+
 const HomePage = (props: Props) => {
   const {
     cardFilterProp,
@@ -27,14 +75,27 @@ const HomePage = (props: Props) => {
     setLoggedIn,
     userList,
   } = props;
-  const [displayComplaintList, setDisplayComplaintList] = useState(
-    complaintList.filter(
-      (complaint: IComplaintInfo) => complaint.reporter === loggedIn
-    )
-  );
+
+  useEffect(() => {
+    refreshComplaintList(props);
+
+    axios
+      .post('http://cafmdemo.emqube.com:81/api/api/Common/GetIssueList')
+      .then((response) => {
+        setIssueDropdownOptions(
+          response.data.IssueList.map((issue) => {
+            return { label: issue.IssueName, value: issue.IssueId };
+          })
+        );
+      });
+  }, []);
+
+  const [displayComplaintList, setDisplayComplaintList] =
+    useState(complaintList);
   const [isMobileEditVisible, setMobileEditVisible] = useState(false);
   const [isEmailEditVisible, setEmailEditVisible] = useState(false);
   const [isMobileView, setMobileView] = useState(false);
+  const [issueDropdownOptions, setIssueDropdownOptions] = useState([]);
 
   const userDetails = userList.find(
     (user: IUserInfo) => user.userId === loggedIn
@@ -51,17 +112,10 @@ const HomePage = (props: Props) => {
     if (filterKey !== '' && filterValue !== EIssueType.EMPTY) {
       setDisplayComplaintList(
         complaintList.filter(
-          (complaint: any) =>
-            complaint.reporter === loggedIn &&
-            complaint[filterKey] === filterValue
+          (complaint: any) => complaint[filterKey] === filterValue
         )
       );
-    } else
-      setDisplayComplaintList(
-        complaintList.filter(
-          (complaint: IComplaintInfo) => complaint.reporter === loggedIn
-        )
-      );
+    } else setDisplayComplaintList(complaintList);
   }, [cardFilterProp, complaintList, loggedIn]);
 
   useEffect(() => {
@@ -138,6 +192,7 @@ const HomePage = (props: Props) => {
         loggedIn={loggedIn}
         setActiveTicket={setActiveTicket}
         setNewTicketvisible={setNewTicketvisible}
+        refreshComplaintList={refreshComplaintList}
       />
     </Dialog>
   );
@@ -241,9 +296,7 @@ const HomePage = (props: Props) => {
             'mobile-view': isMobileView,
           })}
         >
-          <div className="filter">
-            <TicketFilter />
-          </div>
+          <div className="filter">{/* <TicketFilter /> */}</div>
           <Button
             className="add-ticket-button"
             icon={<i className="pi pi-plus" />}
@@ -258,6 +311,7 @@ const HomePage = (props: Props) => {
               return (
                 <ComplaintCard
                   complaint={complaint}
+                  issueDropdownOptions={issueDropdownOptions}
                   onCancelClick={onCancelClick}
                   onEditClick={onEditClick}
                 />

@@ -5,7 +5,9 @@ export interface IUserInfo {
   mobile: string;
   email: string;
   siteName: string;
+  siteId: string;
   location: string;
+  locationId: string;
   password: string;
 }
 

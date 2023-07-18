@@ -3,7 +3,7 @@ export interface IComplaintInfo {
   issue: EIssueType;
   issueDetail: string;
   reporter: string;
-  visitTime: EVisitTime;
+  visitTime: string;
   issueTime: string;
 }
 
@@ -28,7 +28,7 @@ export const getComplaintList = () => {
       issue: EIssueType.CRASHING,
       issueDetail: 'System crashing',
       reporter: '1',
-      visitTime: EVisitTime.AFTERNOON,
+      visitTime: 'Afternoon',
       issueTime: '2023-06-25T10:00:00Z',
     },
     {
@@ -36,7 +36,7 @@ export const getComplaintList = () => {
       issue: EIssueType.OVER_HEATING,
       issueDetail: 'System cverheating',
       reporter: '2',
-      visitTime: EVisitTime.MORNING,
+      visitTime: 'Morning',
       issueTime: '2023-06-25T09:00:00Z',
     },
     {
@@ -44,7 +44,7 @@ export const getComplaintList = () => {
       issue: EIssueType.CRASHING,
       issueDetail: 'System crashing',
       reporter: '2',
-      visitTime: EVisitTime.EVENING,
+      visitTime: 'Evening',
       issueTime: '2023-06-25T13:00:00Z',
     },
     {
@@ -52,7 +52,7 @@ export const getComplaintList = () => {
       issue: EIssueType.SLOW_PERFORMANCE,
       issueDetail: 'System is slow',
       reporter: '1',
-      visitTime: EVisitTime.AFTERNOON,
+      visitTime: 'Afternoon',
       issueTime: '2023-06-25T08:00:00Z',
     },
     {
@@ -60,7 +60,7 @@ export const getComplaintList = () => {
       issue: EIssueType.SLOW_PERFORMANCE,
       issueDetail: 'System is slow',
       reporter: '1',
-      visitTime: EVisitTime.MORNING,
+      visitTime: 'Morning',
       issueTime: '2023-06-25T09:00:00Z',
     },
     {
@@ -68,7 +68,7 @@ export const getComplaintList = () => {
       issue: EIssueType.OVER_HEATING,
       issueDetail: 'System cverheating',
       reporter: '2',
-      visitTime: EVisitTime.AFTERNOON,
+      visitTime: 'Afternoon',
       issueTime: '2023-06-25T11:00:00Z',
     },
     {
@@ -76,7 +76,7 @@ export const getComplaintList = () => {
       issue: EIssueType.SLOW_PERFORMANCE,
       issueDetail: 'System is slow',
       reporter: '2',
-      visitTime: EVisitTime.EVENING,
+      visitTime: 'Evening',
       issueTime: '2023-06-25T16:00:00Z',
     },
     {
@@ -84,7 +84,7 @@ export const getComplaintList = () => {
       issue: EIssueType.CRASHING,
       issueDetail: 'System crashing',
       reporter: '1',
-      visitTime: EVisitTime.EVENING,
+      visitTime: 'Evening',
       issueTime: '2023-06-25T15:00:00Z',
     },
     {
@@ -92,7 +92,7 @@ export const getComplaintList = () => {
       issue: EIssueType.CRASHING,
       issueDetail: 'System crashing',
       reporter: '1',
-      visitTime: EVisitTime.AFTERNOON,
+      visitTime: 'Afternoon',
       issueTime: '2023-06-25T10:00:00Z',
     },
     {
@@ -100,7 +100,7 @@ export const getComplaintList = () => {
       issue: EIssueType.OVER_HEATING,
       issueDetail: 'System cverheating',
       reporter: '2',
-      visitTime: EVisitTime.MORNING,
+      visitTime: 'Morning',
       issueTime: '2023-06-25T09:00:00Z',
     },
     {
@@ -108,7 +108,7 @@ export const getComplaintList = () => {
       issue: EIssueType.CRASHING,
       issueDetail: 'System crashing',
       reporter: '2',
-      visitTime: EVisitTime.EVENING,
+      visitTime: 'Evening',
       issueTime: '2023-06-25T13:00:00Z',
     },
     {
@@ -116,7 +116,7 @@ export const getComplaintList = () => {
       issue: EIssueType.SLOW_PERFORMANCE,
       issueDetail: 'System is slow',
       reporter: '1',
-      visitTime: EVisitTime.AFTERNOON,
+      visitTime: 'Afternoon',
       issueTime: '2023-06-25T08:00:00Z',
     },
     {
@@ -124,7 +124,7 @@ export const getComplaintList = () => {
       issue: EIssueType.SLOW_PERFORMANCE,
       issueDetail: 'System is slow',
       reporter: '1',
-      visitTime: EVisitTime.MORNING,
+      visitTime: 'Morning',
       issueTime: '2023-06-25T09:00:00Z',
     },
     {
@@ -132,7 +132,7 @@ export const getComplaintList = () => {
       issue: EIssueType.OVER_HEATING,
       issueDetail: 'System cverheating',
       reporter: '2',
-      visitTime: EVisitTime.AFTERNOON,
+      visitTime: 'Afternoon',
       issueTime: '2023-06-25T11:00:00Z',
     },
     {
@@ -140,7 +140,7 @@ export const getComplaintList = () => {
       issue: EIssueType.SLOW_PERFORMANCE,
       issueDetail: 'System is slow',
       reporter: '2',
-      visitTime: EVisitTime.EVENING,
+      visitTime: 'Evening',
       issueTime: '2023-06-25T16:00:00Z',
     },
     {
@@ -148,7 +148,7 @@ export const getComplaintList = () => {
       issue: EIssueType.CRASHING,
       issueDetail: 'System crashing',
       reporter: '1',
-      visitTime: EVisitTime.EVENING,
+      visitTime: 'Evening',
       issueTime: '2023-06-25T15:00:00Z',
     },
   ];

@@ -12,8 +12,17 @@ const getTimeString = (dateNum: number) => {
 };
 
 const ComplaintCard = (props: Props) => {
-  const { complaint, onCancelClick, onEditClick, userList } = props;
+  const {
+    complaint,
+    issueDropdownOptions = [],
+    onCancelClick,
+    onEditClick,
+    userList,
+  } = props;
   const { ticketId, issue, reporter, issueTime } = complaint;
+  const issueName =
+    issueDropdownOptions.find((issueItem) => issueItem.value === issue)
+      ?.label || '';
 
   const reporterDetails = userList.find(
     (user: IUserInfo) => user.userId === reporter
@@ -44,7 +53,7 @@ const ComplaintCard = (props: Props) => {
       <div className="complaint-body">
         <div className="complaint-item">
           <div className="complaint-tag">Issue:</div>
-          <div className="complaint-value">{issue}</div>
+          <div className="complaint-value">{issueName}</div>
         </div>
         <div className="complaint-item">
           <div className="complaint-tag">Reported:</div>

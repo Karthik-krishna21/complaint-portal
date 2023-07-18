@@ -3,10 +3,10 @@ import { RootModel } from '.';
 import { IComplaintInfo, getComplaintList } from '../assets/ComplaintInfo';
 
 export const complaintList = createModel<RootModel>()({
-  state: getComplaintList(), // initial state
+  state: [], // initial state
   reducers: {
     // handle state changes with pure functions
-    update(state, payload: IComplaintInfo[]) {
+    update(state, payload) {
       return payload;
     },
   },

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
 import { Dispatch, RootState } from '../models/store';
 import { InputText } from 'primereact/inputtext';
-import { IUserInfo } from '../assets/UserInfo';
 
 import './css/LoginDialogs.scss';
 
 type Props = StateProps & DispatchProps & any;
 
 const Register = (props: Props) => {
-  const { setRegisterVisible, userList, updateUserList } = props;
+  const { setRegisterVisible } = props;
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [mobile, setMobile] = useState('');
@@ -54,14 +54,18 @@ const Register = (props: Props) => {
     {
       id: 'mobile',
       label: 'Mobile',
-      inputProps: { id: 'mobile', value: mobile, keyfilter: 'num' },
+      inputProps: {
+        id: 'mobile',
+        value: mobile,
+        keyfilter: 'num',
+      },
       onChange: setMobile,
       isMandatory: true,
     },
     {
       id: 'email',
       label: 'Email',
-      inputProps: { id: 'mobile', value: email },
+      inputProps: { id: 'email', value: email },
       onChange: setEmail,
       isMandatory: true,
     },
@@ -82,34 +86,22 @@ const Register = (props: Props) => {
   ];
 
   const onSubmitClick = () => {
-    let isMobileFound = false;
-    let userId = 0;
-
-    userList.forEach((user: IUserInfo) => {
-      userId++;
-      if (mobile === user.mobile) {
-        isMobileFound = true;
-        setCreateError('Mobile number already registered');
-      }
-    });
-
-    if (!isMobileFound) {
-      updateUserList([
-        ...userList,
+    axios
+      .post(
+        'http://cafmdemo.emqube.com:81/api/api/Login/RequestSelfRegistration',
         {
-          userId: String(userId),
-          firstName,
-          lastName,
-          mobile,
-          email,
-          siteName,
-          location,
-          password: mobile,
-        },
-      ]);
-
-      setRegisterVisible(false);
-    }
+          'FirstName': firstName,
+          'LastName': lastName,
+          'Email': email,
+          'Mobile': mobile,
+          'SiteName': siteName,
+          'LocationName': location,
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setRegisterVisible(false);
+      });
   };
 
   const renderInputField = (args: any) => {
@@ -157,13 +149,9 @@ const Register = (props: Props) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  userList: state.userList,
-});
+const mapState = (state: RootState) => ({});
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  updateUserList: dispatch.userList.update,
-});
+const mapDispatch = (dispatch: Dispatch) => ({});
 
 type StateProps = ReturnType<typeof mapState>;
 type DispatchProps = ReturnType<typeof mapDispatch>;

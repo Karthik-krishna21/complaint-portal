@@ -1,31 +1,39 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
 import { Dispatch, RootState } from '../models/store';
 import { InputText } from 'primereact/inputtext';
-import { IUserInfo } from '../assets/UserInfo';
 
 import './css/LoginDialogs.scss';
 
 type Props = StateProps & DispatchProps & any;
 
 const GetPassword = (props: Props) => {
-  const { setPasswordVisible, onGetPasswordSuccess, userList } = props;
+  const { setPasswordVisible, onGetPasswordSuccess } = props;
 
   const [mobile, setMobile] = useState('');
   const [isNumberWrong, setNumberWrong] = useState('');
 
   const onSubmitClick = () => {
-    let userFound = false;
-    userList.forEach((user: IUserInfo) => {
-      if (!userFound) {
-        if (mobile === user.mobile) {
-          onGetPasswordSuccess();
-        }
-      }
-    });
+    axios
+      .post('http://cafmdemo.emqube.com:81/api/api/Login/GetLoginKey', {
+        'Mobile': mobile,
+        'KeyInEmail': true,
+        'KeyInMobile': false,
+      })
+      .then((response) => {
+        const { data } = response;
 
-    if (!userFound) setNumberWrong('Mobile number not registered');
+        switch (data?.Message?.MessageTypeValue) {
+          case 1:
+            setNumberWrong('Mobile number not registered');
+            break;
+          case 4:
+            onGetPasswordSuccess(data?.Message?.Text);
+            break;
+        }
+      });
   };
 
   return (
@@ -64,9 +72,7 @@ const GetPassword = (props: Props) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  userList: state.userList,
-});
+const mapState = (state: RootState) => ({});
 
 const mapDispatch = (dispatch: Dispatch) => ({});
 

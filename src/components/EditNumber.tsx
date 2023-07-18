@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
 import { Dispatch, RootState } from '../models/store';
@@ -16,19 +17,14 @@ const GetPassword = (props: Props) => {
   const [doesNumberExist, setNumberExists] = useState('');
 
   const onMobileChange = () => {
-    const userIndex = userList.findIndex(
-      (user: IUserInfo) => user.userId === loggedIn
-    );
-    const user: IUserInfo = userList[userIndex];
-
-    const tempUserList = [...userList];
-    tempUserList[userIndex] = {
-      ...user,
-      mobile,
-    };
-
-    updateUserList(tempUserList);
-    setMobileEditVisible(false);
+    axios
+      .post('http://cafmdemo.emqube.com:81/api/api/Common/UpdateMobile', {
+        'Mobile': mobile,
+        'ProfileId': loggedIn,
+      })
+      .then(() => {
+        setMobileEditVisible(false);
+      });
   };
 
   const onSubmitClick = () => {

@@ -1,33 +1,28 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
 import { Dispatch, RootState } from '../models/store';
 import { InputText } from 'primereact/inputtext';
-import { IUserInfo } from '../assets/UserInfo';
 
 import './css/LoginDialogs.scss';
 
 type Props = StateProps & DispatchProps & any;
 
 const GetPassword = (props: Props) => {
-  const { loggedIn, setEmailEditVisible, updateUserList, userList } = props;
+  const { loggedIn, setEmailEditVisible } = props;
 
   const [email, setEmail] = useState('');
 
   const onEmailChange = () => {
-    const userIndex = userList.findIndex(
-      (user: IUserInfo) => user.userId === loggedIn
-    );
-    const user: IUserInfo = userList[userIndex];
-
-    const tempUserList = [...userList];
-    tempUserList[userIndex] = {
-      ...user,
-      email: email,
-    };
-
-    updateUserList(tempUserList);
-    setEmailEditVisible(false);
+    axios
+      .post('http://cafmdemo.emqube.com:81/api/api/Common/UpdateEmail', {
+        'Email': email,
+        'ProfileId': loggedIn,
+      })
+      .then(() => {
+        setEmailEditVisible(false);
+      });
   };
 
   return (
@@ -63,13 +58,9 @@ const GetPassword = (props: Props) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  userList: state.userList,
-});
+const mapState = (state: RootState) => ({});
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  updateUserList: dispatch.userList.update,
-});
+const mapDispatch = (dispatch: Dispatch) => ({});
 
 type StateProps = ReturnType<typeof mapState>;
 type DispatchProps = ReturnType<typeof mapDispatch>;

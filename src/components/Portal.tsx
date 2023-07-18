@@ -3,22 +3,17 @@ import { connect } from 'react-redux';
 import Login from './Login';
 import { RootState, Dispatch } from '../models/store';
 import HomePage from './HomePage';
-import { IUserInfo } from '../assets/UserInfo';
 
 type Props = StateProps & DispatchProps & any;
 
 const Portal = (props: Props) => {
-  const { containerRef, userList, updateContainerSize } = props;
+  const { containerRef, updateContainerSize } = props;
   const [loggedIn, setLoggedIn] = useState<string | null>('');
 
   useEffect(() => {
     window.addEventListener('resize', computeContainerSize);
     return () => window.removeEventListener('resize', computeContainerSize);
   }, []);
-
-  useEffect(() => {
-    console.log('userList:', userList);
-  }, [userList]);
 
   useEffect(() => {
     computeContainerSize();
@@ -34,9 +29,7 @@ const Portal = (props: Props) => {
   };
 
   const renderHomePage = () => {
-    if (userList.find((user: IUserInfo) => user.userId === loggedIn)) {
-      return <HomePage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />;
-    } else setLoggedIn(null);
+    return <HomePage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />;
   };
 
   return (
@@ -50,13 +43,10 @@ const Portal = (props: Props) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  userList: state.userList,
-});
+const mapState = (state: RootState) => ({});
 
 const mapDispatch = (dispatch: Dispatch) => ({
   updateContainerSize: dispatch.containerSize.update,
-  updateUserList: dispatch.userList.update,
 });
 
 type StateProps = ReturnType<typeof mapState>;

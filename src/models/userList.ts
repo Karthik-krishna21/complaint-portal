@@ -3,10 +3,10 @@ import { RootModel } from '.';
 import { getUserInfo, IUserInfo } from '../assets/UserInfo';
 
 export const userList = createModel<RootModel>()({
-  state: getUserInfo(), // initial state
+  state: [], // initial state
   reducers: {
     // handle state changes with pure functions
-    update(state, payload: IUserInfo[]) {
+    update(state, payload) {
       return payload;
     },
   },

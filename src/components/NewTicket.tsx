@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
 import { Dispatch, RootState } from '../models/store';
@@ -9,9 +10,10 @@ import {
   IComplaintInfo,
 } from '../assets/ComplaintInfo';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { InputText } from 'primereact/inputtext';
+import { IUserInfo } from '../assets/UserInfo';
 
 import './css/LoginDialogs.scss';
-import { InputText } from 'primereact/inputtext';
 
 type Props = StateProps & DispatchProps & any;
 
@@ -48,19 +50,35 @@ export const getVisitDropdownOptions = [
 const NewTicket = (props: Props) => {
   const {
     activeTicket = '',
-    complaintLength,
     complaintList,
     loggedIn,
     setActiveTicket,
     setNewTicketvisible,
-    updateComplaintLength,
-    updateComplaintList,
+    refreshComplaintList,
+    userList,
   } = props;
 
   const complaintIndex = complaintList.findIndex(
     (complaint: IComplaintInfo) => complaint.ticketId === activeTicket
   );
+  const userDetails = userList.find(
+    (user: IUserInfo) => user.userId === loggedIn
+  );
   const complaint: IComplaintInfo = complaintList[complaintIndex];
+
+  const [issueDropdownOptions, setIssueDropdownOptions] = useState([]);
+
+  useEffect(() => {
+    axios
+      .post('http://cafmdemo.emqube.com:81/api/api/Common/GetIssueList')
+      .then((response) => {
+        setIssueDropdownOptions(
+          response.data.IssueList.map((issue) => {
+            return { label: issue.IssueName, value: issue.IssueId };
+          })
+        );
+      });
+  }, []);
 
   const [issue, setIssue] = useState(complaint?.issue || '');
   const [issueDetail, setIssueDetail] = useState(complaint?.issueDetail || '');
@@ -84,32 +102,36 @@ const NewTicket = (props: Props) => {
   };
 
   const onSubmitClick = () => {
-    const currentTime = new Date();
     if (!activeTicket || activeTicket === '') {
-      updateComplaintList([
-        ...complaintList,
-        {
-          ticketId: getNewTicketId(String(complaintLength + 1)),
-          issue,
-          issueDetail,
-          reporter: loggedIn,
-          visitTime,
-          issueTime: currentTime,
-        },
-      ]);
-      updateComplaintLength(complaintLength + 1);
+      axios
+        .post('http://cafmdemo.emqube.com:81/api/api/Ticket/AddUpdateTicket', {
+          'TicketId': 0,
+          'IssueId': issue,
+          'IssueDetails': issueDetail,
+          'Remarks': `Good time to visit: ${visitTime}`,
+          'TimeToVisit': visitTime,
+          'Status': 1,
+          'StatusRemark': '',
+          'LoggedInUser': loggedIn,
+          'SiteId': userDetails.siteId,
+          'LocationId': userDetails.locationId,
+        })
+        .then(() => refreshComplaintList(props));
     } else {
-      const tempComplaintList = [...complaintList];
-      tempComplaintList[complaintIndex] = {
-        ticketId: complaint.ticketId,
-        issue,
-        issueDetail,
-        reporter: complaint.reporter,
-        visitTime,
-        issueTime: '2023-06-25T10:00:00Z',
-      };
-
-      updateComplaintList(tempComplaintList);
+      axios
+        .post('http://cafmdemo.emqube.com:81/api/api/Ticket/AddUpdateTicket', {
+          'TicketId': activeTicket,
+          'IssueId': issue,
+          'IssueDetails': issueDetail,
+          'Remarks': `Good time to visit: ${visitTime}`,
+          'TimeToVisit': visitTime,
+          'Status': 1,
+          'StatusRemark': '',
+          'LoggedInUser': loggedIn,
+          'SiteId': userDetails.siteId,
+          'LocationId': userDetails.locationId,
+        })
+        .then(() => refreshComplaintList(props));
       setActiveTicket('');
     }
 
@@ -128,7 +150,7 @@ const NewTicket = (props: Props) => {
             className="w-full ticket-dropdown"
             placeholder="Select"
             onChange={(e) => setIssue(e.value)}
-            options={getIssueDropdownOptions}
+            options={issueDropdownOptions}
             optionLabel="label"
             optionValue="value"
             value={issue}
@@ -156,15 +178,11 @@ const NewTicket = (props: Props) => {
             Good time to visit? <div className="field-mandatory">*</div>
           </label>
 
-          <Dropdown
-            className="w-full ticket-dropdown"
-            placeholder="Select"
-            onChange={(e) => setVisitTime(e.value)}
-            options={getVisitDropdownOptions}
-            optionLabel="label"
-            optionValue="value"
+          <InputText
+            className="register-input"
+            placeholder="Visit Time"
             value={visitTime}
-            panelClassName="ticket-panel"
+            onChange={(e) => setVisitTime(e.target.value)}
           />
         </div>
 
@@ -212,12 +230,11 @@ const NewTicket = (props: Props) => {
 };
 
 const mapState = (state: RootState) => ({
-  complaintLength: state.complaintLength,
   complaintList: state.complaintList,
+  userList: state.userList,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
-  updateComplaintLength: dispatch.complaintLength.update,
   updateComplaintList: dispatch.complaintList.update,
 });
 
